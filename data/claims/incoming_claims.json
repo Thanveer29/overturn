@@ -62,6 +62,6 @@
     "denial_date": "2026-09-24",
     "evidence_available": ["symptom history"],
     "status": "pending_appeal",
-    "demo_scenario": "No-relevant-memory test. No historical case exists for Alliance + CT Abdomen + insufficient documentation. The agent should say so plainly and recommend reviewing the current insurer policy and available clinical documentation, rather than forcing a recommendation from unrelated cases (per the 'no relevant historical pattern' failure mode)."
+    "demo_scenario": "Cross-insurer weak-precedent test. No case exists for Alliance + CT Abdomen + insufficient documentation specifically, but HC-009 is the same denial type and procedure for a *different* insurer (Meridian). Live-verified: reflect() surfaced HC-009 but explicitly caveated it as a single, non-transferable data point and warned not to assume it applies to Alliance's policy -- a richer result than a flat 'no relevant memory' message, and exactly the cross-insurer caution this dataset is designed to test (see docs/architecture/agent-orchestrator.md)."
   }
 ]

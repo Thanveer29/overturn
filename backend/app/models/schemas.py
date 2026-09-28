@@ -97,5 +97,5 @@ class IncomingClaim(BaseModel):
     provider_id: str
     denial_date: date
     evidence_available: list[str]
-    status: Literal["pending_appeal"]
+    status: Literal["pending_appeal", "resolved_approved", "resolved_rejected"]
     demo_scenario: str
