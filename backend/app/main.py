@@ -8,7 +8,10 @@ app = FastAPI(title="Overturn API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    # Vite auto-increments past 5173 if that port's still held by a just-killed
+    # process (seen in practice), so allow any localhost port in dev rather
+    # than hardcoding one.
+    allow_origin_regex=r"http://localhost:\d+",
     allow_methods=["*"],
     allow_headers=["*"],
 )
