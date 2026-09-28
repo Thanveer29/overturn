@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-09-28T17:19:57.568631+00:00",
+  "note": "Prototype evaluation on synthetic dataset. Not a real-world performance claim.",
+  "results": [
+    {
+      "claim_id": "CLM-101",
+      "without_memory_cited_cases": [],
+      "with_memory_cited_cases": [
+        "HC-003",
+        "HC-004",
+        "HC-005",
+        "HC-007",
+        "HC-008",
+        "HC-018"
+      ],
+      "expected_key_cases": [
+        "HC-003",
+        "HC-005",
+        "HC-007"
+      ],
+      "recalled_key_case_strict_id_match": true,
+      "recalled_key_case_incl_patient_name_match": true,
+      "memory_adds_citations": true,
+      "flags_uncertainty_or_verification": true,
+      "recalled_memory_count": 74
+    },
+    {
+      "claim_id": "CLM-103",
+      "without_memory_cited_cases": [],
+      "with_memory_cited_cases": [
+        "HC-011",
+        "HC-012",
+        "HC-013"
+      ],
+      "expected_key_cases": [
+        "HC-013"
+      ],
+      "recalled_key_case_strict_id_match": true,
+      "recalled_key_case_incl_patient_name_match": true,
+      "memory_adds_citations": true,
+      "flags_uncertainty_or_verification": true,
+      "recalled_memory_count": 74
+    },
+    {
+      "claim_id": "CLM-104",
+      "without_memory_cited_cases": [],
+      "with_memory_cited_cases": [
+        "HC-001",
+        "HC-002",
+        "HC-003",
+        "HC-004",
+        "HC-005",
+        "HC-007",
+        "HC-015",
+        "HC-018"
+      ],
+      "expected_key_cases": [
+        "HC-018"
+      ],
+      "recalled_key_case_strict_id_match": true,
+      "recalled_key_case_incl_patient_name_match": true,
+      "memory_adds_citations": true,
+      "flags_uncertainty_or_verification": true,
+      "recalled_memory_count": 74
+    },
+    {
+      "claim_id": "CLM-105",
+      "without_memory_cited_cases": [],
+      "with_memory_cited_cases": [],
+      "expected_key_cases": [
+        "HC-016"
+      ],
+      "recalled_key_case_strict_id_match": false,
+      "recalled_key_case_incl_patient_name_match": true,
+      "memory_adds_citations": false,
+      "flags_uncertainty_or_verification": true,
+      "recalled_memory_count": 74
+    },
+    {
+      "claim_id": "CLM-106",
+      "without_memory_cited_cases": [],
+      "with_memory_cited_cases": [
+        "HC-009",
+        "HC-018"
+      ],
+      "expected_key_cases": [
+        "HC-009"
+      ],
+      "recalled_key_case_strict_id_match": true,
+      "recalled_key_case_incl_patient_name_match": true,
+      "memory_adds_citations": true,
+      "flags_uncertainty_or_verification": true,
+      "recalled_memory_count": 74
+    }
+  ]
+}
