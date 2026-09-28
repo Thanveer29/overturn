@@ -2,16 +2,25 @@
 
 > Turn every denied claim into institutional knowledge.
 
-**Status:** early scaffold — architecture and repo structure only. Implementation in progress.
+**Status:** core loop working end-to-end (backend, Hindsight memory, agent, frontend),
+live-verified against real Groq + Hindsight Cloud. Evaluation harness, tests, and
+submission content (video/article) are still in progress.
 
 Overturn is an AI-powered medical insurance denial-appeal intelligence agent for
 healthcare revenue-cycle teams. It uses [Hindsight](https://hindsight.vectorize.io/)
 as its memory layer so that every denial and appeal outcome becomes institutional
 knowledge that improves future recommendations.
 
-This README is a placeholder. The full README (architecture, setup, demo, dataset,
-evaluation, limitations) will be written once the core implementation lands — see
-`docs/architecture/` for the design docs in the meantime.
+This README is still a placeholder for the polished version (setup, demo, dataset,
+evaluation, limitations) that will be written once evaluation and submission content are
+done. In the meantime, see `docs/architecture/`:
+
+- [`data-model.md`](docs/architecture/data-model.md) — entities and the synthetic dataset
+- [`hindsight-integration.md`](docs/architecture/hindsight-integration.md) — the verified
+  Hindsight API and live retain/recall/reflect results
+- [`agent-orchestrator.md`](docs/architecture/agent-orchestrator.md) — the agent pipeline
+  and live before/after verification
+- [`frontend.md`](docs/architecture/frontend.md) — the UI and how to run it locally
 
 ## Repo layout
 
