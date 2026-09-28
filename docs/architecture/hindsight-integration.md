@@ -40,53 +40,76 @@ GitHub README before any code was written.
 | Directive (`verify-before-asserting-policy`) | Hindsight-enforced safety rule: never assert a historical pattern is a guaranteed/current insurer policy; always frame as "N of M historical cases," and call out single-precedent cases explicitly. This is Hindsight's own hard-rule mechanism, not something Overturn re-implements — see [`hindsight_client.py`](../../backend/app/memory/hindsight_client.py). |
 | `disposition_skepticism=4` | Set high deliberately — the bank should lean skeptical/cautious when reasoning about denial patterns, matching the "historical observation, verify current policy" tone required by the design brief. |
 
-## What's implemented vs. what's still open
+## What's implemented, and live-verified against Hindsight Cloud
 
 **Implemented** ([`backend/app/memory/hindsight_client.py`](../../backend/app/memory/hindsight_client.py)):
 `OverturnMemory.ensure_org_bank()`, `.retain_historical_case()`, `.retain_outcome()`,
-`.recall()`, `.reflect()`. Confirmed to import, construct, and fail *cleanly* (not crash)
-against an unreachable server — see verification below.
+`.recall()`, `.reflect()`, plus context-manager support (`with OverturnMemory() as m:`)
+so the underlying `aiohttp` session closes cleanly.
 
-**Not yet live-tested**: every call above still needs to be proven against a real,
-running Hindsight instance. That requires either:
+### Local server attempt — blocked, documented for the record
 
-1. **Local server** — `pip install hindsight-api` or Docker, which needs an LLM API key
-   (Groq's free tier is what the hackathon docs recommend) for the server's own fact
-   extraction. Docker is not available in this dev environment, so the bare-metal `pip`
-   route is the fallback.
-2. **Hindsight Cloud** — `https://api.hindsight.vectorize.io` + an API key (the
-   `MEMHACK99` promo code gives $50 credit, added after registering in billing).
+Docker isn't available in this dev environment, so the bare-metal `pip install
+hindsight-api` route was tried first. It failed twice, for two distinct, real reasons
+(not fabricated — both came from actual stack traces):
 
-Neither can be provisioned without your credentials — this is the actual blocker on
-finishing live verification of this phase.
+1. The default local-ML embeddings/reranker path needs `sentence-transformers`, which
+   isn't installed by `hindsight-api` alone — the server printed its own actionable
+   error naming the fix (`pip install hindsight-api[local-ml]`, or switch to a remote
+   embeddings provider).
+2. After installing `sentence-transformers`, importing it transitively pulls in
+   `scikit-learn`'s compiled `_pairwise_distances_reduction` extension, and loading that
+   `.pyd` was blocked by this machine's **Windows Application Control policy**
+   (`DLL load failed... An Application Control policy has blocked this file`) — a
+   corporate security control, not something to work around.
 
-## Verification performed without a live server
+Given that, **Hindsight Cloud** was used instead — it does embeddings/reranking
+server-side, sidestepping the blocked local dependency entirely, and is a legitimate
+deployment target on its own.
+
+### Live verification against Hindsight Cloud
 
 ```bash
 python scripts/validate_seed_data.py   # schema + referential integrity — passes
 python scripts/load_db.py              # loads all seed data into SQLite — passes
-uvicorn app.main:app                   # FastAPI boots
-curl localhost:8000/health             # {"status":"ok", "hindsight_base_url": "...", ...}
-curl localhost:8000/health/hindsight   # {"status":"error", "detail": "Cannot connect..."}
+python scripts/seed_hindsight.py       # creates the bank + directive, retains 18 cases — passes
+python scripts/query_memory.py CLM-101 # live recall() + reflect() — see below
 ```
 
-The last line is the expected, correctly-handled result with no server running: the
-wrapper attempted a real `recall()` call against `HINDSIGHT_BASE_URL` and reported the
-connection failure instead of crashing the app.
+`seed_hindsight.py` created the `riverside-medical-group` bank, applied
+`retain_mission`/`reflect_mission`/disposition config, created the
+`verify-before-asserting-policy` directive, and retained all 18 historical cases without
+error.
 
-## Next step once credentials are available
+`query_memory.py CLM-101` (Meridian + Lumbar MRI + medical necessity — the core pattern
+case) then proved the full loop live:
 
-```bash
-# Option A: local, bare-metal
-export HINDSIGHT_API_LLM_PROVIDER=groq
-export HINDSIGHT_API_LLM_API_KEY=gsk_...
-pip install hindsight-api && hindsight-api   # starts on :8888
+- **`recall()`** returned all of HC-001–HC-008 and HC-015 (the Meridian lumbar-MRI
+  cluster) as both `world` facts and auto-consolidated `observation`s, alongside
+  everything else in the bank (Alliance/Summit Point cases, the CT-abdomen and
+  sleep-study cases) — confirming `recall()` is a broad multi-strategy search, not a
+  filtered one; narrowing happens in `reflect()` or via the agent's own tool-level
+  filtering (Phase 5).
+- **`reflect()`** produced a structured, evidence-cited recommendation: it built a table
+  of exactly the 9 relevant historical cases, correctly identified the winning pattern
+  (6+ weeks PT documentation + specialist referral, from HC-003/005/007), correctly
+  flagged HC-008 as a case where that same pattern still failed (missing neurological
+  exam findings), and referenced HC-018 as a cross-insurer caution against generic
+  documentation — all without being told any of this by the query itself.
+- The directive worked as designed: `reflect()`'s output opened with *"These do not
+  represent a guaranteed, current, or universal policy of Meridian Health Partners.
+  Always verify the insurer's current clinical guidelines..."* — language pulled
+  directly from `SAFETY_DIRECTIVE_CONTENT`, confirming Hindsight is enforcing the
+  directive during reasoning rather than it being decorative.
 
-# Option B: Hindsight Cloud — set in .env
-HINDSIGHT_BASE_URL=https://api.hindsight.vectorize.io
-HINDSIGHT_API_KEY=<your cloud key>
-```
+This is the strongest evidence so far for the hackathon's 25%-weighted "Use of Hindsight
+Memory" criterion: the safety framing and the pattern-vs-exception reasoning came from
+Hindsight's own retrieval and reasoning, not from prompt engineering in Overturn's code.
 
-Then: `python scripts/seed_hindsight.py` (creates the bank + directive, retains all 18
-historical cases) and re-check `curl localhost:8000/health/hindsight` for `{"status":
-"ok"}`.
+## Known follow-ups
+
+- `recall()`'s `types`/`min_scores`/`tags` filters (verified in the API reference) aren't
+  used yet — the agent's tools (Phase 5) should filter by insurer/procedure so the UI's
+  "relevant memories" list isn't the full bank.
+- `retain_outcome()` is written but not yet exercised — that happens once the agent
+  processes a live claim and its outcome is recorded (Phase 6/7).

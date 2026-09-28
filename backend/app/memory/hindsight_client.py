@@ -39,6 +39,15 @@ class OverturnMemory:
             api_key=api_key or settings.hindsight_api_key,
         )
 
+    def __enter__(self) -> "OverturnMemory":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()
+
+    def close(self) -> None:
+        self._client.close()
+
     def ensure_org_bank(self, org_id: str, org_name: str) -> None:
         """Create (idempotently) and configure the org's memory bank.
 

@@ -22,8 +22,8 @@ def health_hindsight():
     from app.memory.hindsight_client import OverturnMemory
 
     try:
-        memory = OverturnMemory()
-        memory.recall(org_id="riverside-medical-group", query="health check")
+        with OverturnMemory() as memory:
+            memory.recall(org_id="riverside-medical-group", query="health check")
         return {"status": "ok"}
     except Exception as exc:
         return {"status": "error", "detail": str(exc)}
