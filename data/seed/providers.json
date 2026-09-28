@@ -1,0 +1,5 @@
+[
+  { "id": "dr-whitfield", "name": "Dr. Elena Whitfield, MD", "specialty": "Orthopedic Surgery" },
+  { "id": "dr-chen", "name": "Dr. Marcus Chen, MD", "specialty": "Neurology" },
+  { "id": "dr-nandakumar", "name": "Dr. Priya Nandakumar, MD", "specialty": "Pulmonology" }
+]

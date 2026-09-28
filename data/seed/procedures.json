@@ -1,0 +1,7 @@
+[
+  { "id": "proc-mri-lumbar", "name": "MRI Lumbar Spine without Contrast", "cpt_code": "72148" },
+  { "id": "proc-mri-knee", "name": "MRI Knee without Contrast", "cpt_code": "73721" },
+  { "id": "proc-ct-abdomen", "name": "CT Abdomen and Pelvis with Contrast", "cpt_code": "74177" },
+  { "id": "proc-sleep-study", "name": "Polysomnography (Sleep Study)", "cpt_code": "95810" },
+  { "id": "proc-pt-eval", "name": "Physical Therapy Evaluation", "cpt_code": "97162" }
+]

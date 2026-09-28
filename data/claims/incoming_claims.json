@@ -1,0 +1,67 @@
+[
+  {
+    "claim_id": "CLM-101",
+    "org_id": "riverside-medical-group",
+    "insurer_id": "ins-meridian",
+    "procedure_id": "proc-mri-lumbar",
+    "denial_reason_id": "den-med-necessity",
+    "patient_id": "pt-015",
+    "provider_id": "dr-whitfield",
+    "denial_date": "2026-09-15",
+    "evidence_available": ["7-week physical therapy records", "orthopedic specialist referral", "symptom history"],
+    "status": "pending_appeal",
+    "demo_scenario": "Core before/after demo case. Without memory: generic appeal advice. With Hindsight: recalls HC-003/005/007's PT-documentation + specialist-referral pattern and confirms this claim already has matching evidence available, producing a specific, evidence-grounded recommendation."
+  },
+  {
+    "claim_id": "CLM-103",
+    "org_id": "riverside-medical-group",
+    "insurer_id": "ins-alliance",
+    "procedure_id": "proc-mri-lumbar",
+    "denial_reason_id": "den-med-necessity",
+    "patient_id": "pt-105",
+    "provider_id": "dr-whitfield",
+    "denial_date": "2026-09-18",
+    "evidence_available": ["6-week physical therapy records", "lumbar imaging dated 4 months before filing"],
+    "status": "pending_appeal",
+    "demo_scenario": "Different-insurer case. Tests whether the agent correctly recalls Alliance-specific history (HC-011/012/013, including the 90-day imaging requirement from HC-013) instead of blindly reusing Meridian's PT-only pattern. Current imaging is 4 months old, mirroring HC-013's failure mode, so the agent should flag it as a gap."
+  },
+  {
+    "claim_id": "CLM-104",
+    "org_id": "riverside-medical-group",
+    "insurer_id": "ins-meridian",
+    "procedure_id": "proc-mri-knee",
+    "denial_reason_id": "den-med-necessity",
+    "patient_id": "pt-016",
+    "provider_id": "dr-whitfield",
+    "denial_date": "2026-09-20",
+    "evidence_available": ["symptom history", "physician recommendation letter"],
+    "status": "pending_appeal",
+    "demo_scenario": "Over-generalization test. Tests whether the agent filters out the irrelevant lumbar-spine pattern (HC-001/003/005/007) and instead surfaces the more relevant, cautionary HC-018 (same insurer, same denial reason, but knee-specific documentation required, and generic PT records were not enough)."
+  },
+  {
+    "claim_id": "CLM-105",
+    "org_id": "riverside-medical-group",
+    "insurer_id": "ins-summitpoint",
+    "procedure_id": "proc-sleep-study",
+    "denial_reason_id": "den-prior-auth",
+    "patient_id": "pt-017",
+    "provider_id": "dr-nandakumar",
+    "denial_date": "2026-09-22",
+    "evidence_available": ["sleep study ordering justification"],
+    "status": "pending_appeal",
+    "demo_scenario": "Low-evidence / uncertainty test. Only HC-016 exists for this insurer, so the agent should recommend the retroactive-authorization strategy while explicitly flagging that it rests on a single historical case, not an established pattern."
+  },
+  {
+    "claim_id": "CLM-106",
+    "org_id": "riverside-medical-group",
+    "insurer_id": "ins-alliance",
+    "procedure_id": "proc-ct-abdomen",
+    "denial_reason_id": "den-insufficient-doc",
+    "patient_id": "pt-018",
+    "provider_id": "dr-chen",
+    "denial_date": "2026-09-24",
+    "evidence_available": ["symptom history"],
+    "status": "pending_appeal",
+    "demo_scenario": "No-relevant-memory test. No historical case exists for Alliance + CT Abdomen + insufficient documentation. The agent should say so plainly and recommend reviewing the current insurer policy and available clinical documentation, rather than forcing a recommendation from unrelated cases (per the 'no relevant historical pattern' failure mode)."
+  }
+]

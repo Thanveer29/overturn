@@ -1,0 +1,27 @@
+[
+  {
+    "id": "den-med-necessity",
+    "name": "Medical Necessity Not Established",
+    "description": "Insurer determined the submitted documentation does not establish that the procedure was medically necessary."
+  },
+  {
+    "id": "den-prior-auth",
+    "name": "Missing Prior Authorization",
+    "description": "Procedure was performed without the insurer's required prior authorization on file."
+  },
+  {
+    "id": "den-experimental",
+    "name": "Experimental/Investigational Procedure",
+    "description": "Insurer classifies the procedure as experimental or investigational and outside covered benefits."
+  },
+  {
+    "id": "den-insufficient-doc",
+    "name": "Insufficient Clinical Documentation",
+    "description": "Submitted documentation was incomplete or did not meet the insurer's documentation requirements."
+  },
+  {
+    "id": "den-duplicate",
+    "name": "Duplicate Claim Submission",
+    "description": "Insurer's system flagged the claim as a duplicate of a previously submitted claim."
+  }
+]
